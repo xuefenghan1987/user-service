@@ -1,0 +1,24 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/user_service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQLDialect
+  application:
+    name: USER-SERVICE
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html  # 访问路径（默认）
+    tags-sorter: alpha      # 按字母排序标签
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs      # OpenAPI描述文件路径
+  default-produces-media-type: application/json
