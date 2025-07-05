@@ -3,7 +3,7 @@ pipeline {
 
   tools {
     jdk 'jdk17'
-    maven 'maven'
+    maven 'maven3.9.10'
   }
 
   stages {
@@ -24,13 +24,6 @@ pipeline {
         sh 'docker build -t userservice-user-service .'
       }
     }
-
-    stage('Test Git Clone') {
-      steps {
-        sh 'git clone https://github.com/xuefenghan1987/user-service.git'
-      }
-    }
-
 
     stage('Restart Container') {
       steps {
