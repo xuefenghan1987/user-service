@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    environment:
+      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
+    user: root  # 允许使用 apt-get 安装软件
+    command: >
+      bash -c "apt-get update &&
+               apt-get install -y git &&
+               /usr/bin/tini -- /usr/local/bin/jenkins.sh"
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: user_service
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  user-service:
+    build:
+      context: .            # 构建目录为当前目录（包含 Dockerfile）
+    container_name: user-service
+    ports:
+      - "8082:8082"         # 将容器的 8080 映射到主机的 8081
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/user_service?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ""
+    restart: always
+
+volumes:
+  jenkins_home:
+  mysql_data:

@@ -23,6 +23,7 @@ springdoc:
     path: /v3/api-docs      # OpenAPI描述文件路径
   default-produces-media-type: application/json
 
+
 eureka:
   client:
     register-with-eureka: false
